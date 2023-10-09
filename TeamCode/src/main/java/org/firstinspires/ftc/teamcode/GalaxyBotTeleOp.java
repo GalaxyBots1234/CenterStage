@@ -89,7 +89,7 @@ public class GalaxyBotTeleOp extends OpMode {
         } catch (RobotCoreException e) {
             e.printStackTrace();
         }
-        
+
         mecanumDrive(botHeading);
         telemetry.update();
     }
