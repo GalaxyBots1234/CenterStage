@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 @TeleOp(name="GalaxyBot-TeleOp", group="Opmode")
 public class GalaxyBotTeleOp extends OpMode {
@@ -15,7 +20,7 @@ public class GalaxyBotTeleOp extends OpMode {
     private Gamepad currentGamepad2 = new Gamepad();
     private Gamepad previousGamepad2 = new Gamepad();
 
-    private BNO055IMU imu;
+    private IMU imu;
 
     private boolean fieldCentric = false;
 
@@ -74,15 +79,21 @@ public class GalaxyBotTeleOp extends OpMode {
         robot = new GalaxyBot(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        imu.initialize(parameters);
+        imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters myIMUparameters;
+        myIMUparameters = new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
+                )
+        );
+        imu.initialize(myIMUparameters);
+
     }
 
     @Override
     public void loop() {
-        double botHeading = -imu.getAngularOrientation().firstAngle;
+        double botHeading = -imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
         try {
             copyGamepad();
