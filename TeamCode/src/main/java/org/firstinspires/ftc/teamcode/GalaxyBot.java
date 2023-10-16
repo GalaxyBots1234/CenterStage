@@ -27,7 +27,7 @@ public class GalaxyBot {
         leftBack = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
         linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
-
+        linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -47,13 +47,8 @@ public class GalaxyBot {
         rightFront.setPower(frontRightPower);
     }
 
-    public void lift() {
-        int currentPosition = linearActuator.getCurrentPosition();
-        int desiredPosition = 300;
-        linearActuator.setTargetPosition(desiredPosition);
-        linearActuator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearActuator.setTargetPosition(currentPosition);
-        linearActuator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public void lift(float intensity, float direction) {
+        linearActuator.setPower(intensity * direction);
     }
 
     public double getElapsedTime() {
