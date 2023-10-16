@@ -69,6 +69,12 @@ public class GalaxyBotTeleOp extends OpMode {
         currentGamepad2.copy(gamepad2);
     }
 
+    private void liftRobot() {
+        if (gamepad1.a) {
+            robot.lift();
+        }
+    }
+
     @Override
     public void init() {
         robot = new GalaxyBot(hardwareMap);
