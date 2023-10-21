@@ -76,10 +76,18 @@ public class GalaxyBotTeleOp extends OpMode {
 
     private void liftRobot() {
         if (gamepad1.a) {
-            robot.lift();
+            robot.lift(.5f, -1);
+        }
+        else if(gamepad1.b) {
+            robot.lift(.5f, 1);
         }
     }
 
+    private void intakePixel() {
+        if (gamepad1.x) {
+            robot.intake();
+        }
+    }
     @Override
     public void init() {
         robot = new GalaxyBot(hardwareMap);
@@ -108,6 +116,8 @@ public class GalaxyBotTeleOp extends OpMode {
         }
 
         mecanumDrive(botHeading);
+        liftRobot();
+        intakePixel();
         telemetry.update();
     }
 }
