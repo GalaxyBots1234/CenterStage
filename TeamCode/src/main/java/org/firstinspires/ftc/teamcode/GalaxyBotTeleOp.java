@@ -44,6 +44,7 @@ public class GalaxyBotTeleOp extends OpMode {
         if (gamepad1.left_bumper) {
             fieldCentric = !fieldCentric;
         }
+        fieldCentric = false;
         if (fieldCentric) {
             frontLeftPower = (rotY + rotX + rx) / denominator * LIMIT_POWER;
             backLeftPower = (rotY - rotX + rx) / denominator * LIMIT_POWER;
@@ -63,7 +64,7 @@ public class GalaxyBotTeleOp extends OpMode {
         telemetry.addData("rightBackPower", backRightPower);
         telemetry.addData("y", y);
         telemetry.addData("x", x);
-        telemetry.addData("rx", x);
+        telemetry.addData("rx", rx);
     }
 
     private void copyGamepad() throws RobotCoreException {
