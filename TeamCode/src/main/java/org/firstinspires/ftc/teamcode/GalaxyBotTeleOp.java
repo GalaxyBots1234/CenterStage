@@ -84,6 +84,15 @@ public class GalaxyBotTeleOp extends OpMode {
             robot.lift(.5f, 1);
         }*/
     }
+    private void liftslide(){
+        if (gamepad1.left_bumper) {
+            robot.lift(0.5f, 1);
+        }
+        else if(gamepad1.right_bumper) {
+            robot.lift(0.5f,-1);
+
+        }
+    }
 
     private void intakePixel() {
         if (gamepad1.x) {
@@ -140,7 +149,7 @@ public class GalaxyBotTeleOp extends OpMode {
 
         mecanumDrive(botHeading);
         liftRobot();
-
+        liftslide();
         spineReorientation();
         intakePixel();
         clawRotateInput();
