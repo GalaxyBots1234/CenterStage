@@ -17,6 +17,7 @@ public class GalaxyBot {
     private DcMotor intake;
     private HardwareMap hwMap;
 
+    private boolean intakeOn = false;
     private ElapsedTime runtime = new ElapsedTime();
     public GalaxyBot(HardwareMap hwMap) {
         this.hwMap = hwMap;
@@ -27,9 +28,9 @@ public class GalaxyBot {
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftBack = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
-        linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
+       // linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
         intake = hwMap.get(DcMotor.class, "intake");
-        linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        //linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -48,15 +49,23 @@ public class GalaxyBot {
         rightBack.setPower(backRightPower);
         rightFront.setPower(frontRightPower);
     }
-
+/*
     public void lift(float intensity, float direction) {
         linearActuator.setPower(intensity * direction);
     }
-
+*/
     public void intake() {
-        intake.setPower(1.0);
+        if(intakeOn) {
+            intake.setPower(1.0f);
+        }
+        else {
+            intake.setPower(0.0f);
+        }
     }
 
+    public void setIntakeOn() {
+        intakeOn = !intakeOn;
+    }
     public double getElapsedTime() {
         return runtime.time(TimeUnit.MILLISECONDS);
     }

@@ -27,8 +27,8 @@ public class GalaxyBotTeleOp extends OpMode {
     private void mecanumDrive(double rotation) {
         final double LIMIT_POWER = 0.5;
 
-        double y = -gamepad1.left_stick_y; // Remember, this is reversed!
-        double x = gamepad1.left_stick_x;
+        double y = gamepad1.left_stick_y; // Remember, this is reversed!
+        double x = -gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x;
 
         double rotX = x * Math.cos(rotation) - y * Math.sin(rotation);
@@ -75,18 +75,18 @@ public class GalaxyBotTeleOp extends OpMode {
         currentGamepad2.copy(gamepad2);
     }
 
-    private void liftRobot() {
+    private void liftRobot() {/*
         if (gamepad1.a) {
             robot.lift(.5f, -1);
         }
         else if(gamepad1.b) {
             robot.lift(.5f, 1);
-        }
+        }*/
     }
 
     private void intakePixel() {
         if (gamepad1.x) {
-            robot.intake();
+            robot.setIntakeOn();
         }
     }
     @Override
@@ -105,6 +105,7 @@ public class GalaxyBotTeleOp extends OpMode {
         imu.initialize(myIMUparameters);
 
     }
+
 
     @Override
     public void loop() {
