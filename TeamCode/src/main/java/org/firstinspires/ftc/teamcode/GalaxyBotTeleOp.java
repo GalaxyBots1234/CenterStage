@@ -90,6 +90,26 @@ public class GalaxyBotTeleOp extends OpMode {
             robot.setIntakeOn();
         }
     }
+    private void clawRotateInput() {
+        if(gamepad1.y) {
+            robot.setClawRotator();
+        }
+    }
+
+
+    private void clawOpenInput() {
+        if(gamepad1.a) {
+            robot.setClawOpen();
+        }
+    }
+    private void spineReorientation() {
+        if(gamepad1.dpad_down) {
+            robot.setSpineAngularity(-0.05f);
+        }
+        else if(gamepad1.dpad_up) {
+            robot.setSpineAngularity(0.05f);
+        }
+    }
     @Override
     public void init() {
         robot = new GalaxyBot(hardwareMap);
@@ -120,7 +140,11 @@ public class GalaxyBotTeleOp extends OpMode {
 
         mecanumDrive(botHeading);
         liftRobot();
+
+        spineReorientation();
         intakePixel();
+        clawRotateInput();
+        clawOpenInput();
         robot.intake();
         telemetry.update();
     }
