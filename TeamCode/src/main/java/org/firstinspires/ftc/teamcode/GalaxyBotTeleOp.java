@@ -22,6 +22,7 @@ public class GalaxyBotTeleOp extends OpMode {
 
     private IMU imu;
 
+    
     private boolean fieldCentric = false;
 
     private void mecanumDrive(double rotation) {
@@ -120,6 +121,7 @@ public class GalaxyBotTeleOp extends OpMode {
         mecanumDrive(botHeading);
         liftRobot();
         intakePixel();
+        robot.intake();
         telemetry.update();
     }
 }
