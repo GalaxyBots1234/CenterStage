@@ -42,43 +42,43 @@ public class GalaxyBot {
         rightBack = hwMap.get(DcMotor.class, "right_back");
        // linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
         intake = hwMap.get(DcMotor.class, "intake");
-        clawControl = hwMap.get(Servo.class, "claw_control");
-        clawRotator = hwMap.get(Servo.class, "claw_rotator");
-        robotSpineLeft = hwMap.get(Servo.class, "robot_spine_left");
-
-        robotSpineRight = hwMap.get(Servo.class, "robot_spine_right");
-        robotSpineLeft.setDirection(Servo.Direction.REVERSE);
+//        clawControl = hwMap.get(Servo.class, "claw_control");
+//        clawRotator = hwMap.get(Servo.class, "claw_rotator");
+//        robotSpineLeft = hwMap.get(Servo.class, "robot_spine_left");
+//
+//        robotSpineRight = hwMap.get(Servo.class, "robot_spine_right");
+//        robotSpineLeft.setDirection(Servo.Direction.REVERSE);
         //linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
-    public void setSpineAngularity(float angularity) {
-        robotSpineLeft.setPosition(robotSpineLeft.getPosition() + angularity);
-
-        robotSpineRight.setPosition(robotSpineRight.getPosition() + angularity);
-    }
-
-    public void setClawRotator() {
-        clawRotate = !clawRotate;
-        if(clawRotate) {
-            clawRotator.setPosition(1.0);
-        }
-        else {
-            clawRotator.setPosition(0.0);
-        }
-    }
-
-    public void setClawOpen() {
-        clawOpen = !clawOpen;
-        if(clawOpen) {
-            clawControl.setPosition(1.0);
-        }
-        else {
-            clawControl.setPosition(0.0);
-        }
-    }
+//    public void setSpineAngularity(float angularity) {
+//        robotSpineLeft.setPosition(robotSpineLeft.getPosition() + angularity);
+//
+//        robotSpineRight.setPosition(robotSpineRight.getPosition() + angularity);
+//    }
+//
+//    public void setClawRotator() {
+//        clawRotate = !clawRotate;
+//        if(clawRotate) {
+//            clawRotator.setPosition(1.0);
+//        }
+//        else {
+//            clawRotator.setPosition(0.0);
+//        }
+//    }
+//
+//    public void setClawOpen() {
+//        clawOpen = !clawOpen;
+//        if(clawOpen) {
+//            clawControl.setPosition(1.0);
+//        }
+//        else {
+//            clawControl.setPosition(0.0);
+//        }
+//    }
 
 
     public void drive(double speed) {
@@ -110,6 +110,9 @@ public class GalaxyBot {
 
     public void setIntakeOn() {
         intakeOn = !intakeOn;
+    }
+    public boolean getIntakeOn() {
+        return intakeOn;
     }
     public double getElapsedTime() {
         return runtime.time(TimeUnit.MILLISECONDS);
