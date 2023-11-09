@@ -52,6 +52,8 @@ public class GalaxyBot {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+
     }
 
 //    public void setSpineAngularity(float angularity) {
@@ -103,7 +105,7 @@ public class GalaxyBot {
         if(intakeOn) {
             intake.setPower(1.0f);
         }
-        else {
+        else if(!intakeOn) {
             intake.setPower(0.0f);
         }
     }
