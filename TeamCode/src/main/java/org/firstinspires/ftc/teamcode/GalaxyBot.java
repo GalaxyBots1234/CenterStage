@@ -14,8 +14,6 @@ public class GalaxyBot {
     private DcMotor rightBack;
     private DcMotor rightFront;
     private DcMotor linearActuator;
-    private DcMotor linearSlideLeft;
-    private DcMotor linearSlideRight;
     private DcMotor intake;
     private HardwareMap hwMap;
 
@@ -29,19 +27,9 @@ public class GalaxyBot {
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftBack = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
-        //linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
+        linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
         intake = hwMap.get(DcMotor.class, "intake");
-        linearSlideLeft = hwMap.get(DcMotor.class, "leftEncoder");
-
-        linearSlideRight = hwMap.get(DcMotor.class, "rightEncoder");
-
-        linearSlideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linearSlideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        linearSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        linearSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
-        //linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -61,13 +49,8 @@ public class GalaxyBot {
         rightFront.setPower(frontRightPower);
     }
 
-//    public void lift(float intensity, float direction) {
-//        linearActuator.setPower(intensity * direction);
-//    }
-
-    public void linearSlide(float intensity, float direction) {
-        linearSlideLeft.setPower(intensity * direction);
-        linearSlideRight.setPower(intensity * direction);
+    public void lift(float intensity, float direction) {
+        linearActuator.setPower(intensity * direction);
     }
 
     public void intake() {
