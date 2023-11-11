@@ -24,6 +24,8 @@ public class GalaxyBot {
 
     private Servo robotSpineRight;
     private HardwareMap hwMap;
+    private DcMotor rightslide;
+    private DcMotor leftslide;
 
     private boolean intakeOn = false;
 
@@ -40,47 +42,48 @@ public class GalaxyBot {
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftBack = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
-       // linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
+        linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
         intake = hwMap.get(DcMotor.class, "intake");
-//        clawControl = hwMap.get(Servo.class, "claw_control");
-//        clawRotator = hwMap.get(Servo.class, "claw_rotator");
-//        robotSpineLeft = hwMap.get(Servo.class, "robot_spine_left");
-//
-//        robotSpineRight = hwMap.get(Servo.class, "robot_spine_right");
-//        robotSpineLeft.setDirection(Servo.Direction.REVERSE);
-        //linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        clawControl = hwMap.get(Servo.class, "claw_control");
+        clawRotator = hwMap.get(Servo.class, "claw_rotator");
+        robotSpineLeft = hwMap.get(Servo.class, "robot_spine_left");
+
+        robotSpineRight = hwMap.get(Servo.class, "robot_spine_right");
+        robotSpineLeft.setDirection(Servo.Direction.REVERSE);
+        leftslide = hwMap.get(DcMotor.class, "left_slide");
+        rightslide = hwMap.get(DcMotor.class,"right_slide");
+        linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
-//    public void setSpineAngularity(float angularity) {
-//        robotSpineLeft.setPosition(robotSpineLeft.getPosition() + angularity);
-//
-//        robotSpineRight.setPosition(robotSpineRight.getPosition() + angularity);
-//    }
-//
-//    public void setClawRotator() {
-//        clawRotate = !clawRotate;
-//        if(clawRotate) {
-//            clawRotator.setPosition(1.0);
-//        }
-//        else {
-//            clawRotator.setPosition(0.0);
-//        }
-//    }
-//
-//    public void setClawOpen() {
-//        clawOpen = !clawOpen;
-//        if(clawOpen) {
-//            clawControl.setPosition(1.0);
-//        }
-//        else {
-//            clawControl.setPosition(0.0);
-//        }
-//    }
+    public void setSpineAngularity(float angularity) {
+        robotSpineLeft.setPosition(robotSpineLeft.getPosition() + angularity);
+
+        robotSpineRight.setPosition(robotSpineRight.getPosition() + angularity);
+    }
+
+    public void setClawRotator() {
+        clawRotate = !clawRotate;
+        if(clawRotate) {
+            clawRotator.setPosition(1.0);
+        }
+        else {
+            clawRotator.setPosition(0.0);
+        }
+    }
+
+    public void setClawOpen() {
+        clawOpen = !clawOpen;
+        if(clawOpen) {
+            clawControl.setPosition(1.0);
+        }
+        else {
+            clawControl.setPosition(0.0);
+        }
+    }
 
 
     public void drive(double speed) {
@@ -96,16 +99,22 @@ public class GalaxyBot {
         rightBack.setPower(backRightPower);
         rightFront.setPower(frontRightPower);
     }
-/*
+    public void moveSlide(double power, double direction) {
+        leftslide.setPower(power * direction);
+        rightslide.setPower(power * direction);
+
+    }
+
+
     public void lift(float intensity, float direction) {
         linearActuator.setPower(intensity * direction);
     }
-*/
+
     public void intake() {
         if(intakeOn) {
             intake.setPower(1.0f);
         }
-        else if(!intakeOn) {
+        else {
             intake.setPower(0.0f);
         }
     }
@@ -113,11 +122,10 @@ public class GalaxyBot {
     public void setIntakeOn() {
         intakeOn = !intakeOn;
     }
-    public boolean getIntakeOn() {
-        return intakeOn;
-    }
     public double getElapsedTime() {
         return runtime.time(TimeUnit.MILLISECONDS);
     }
+
+
 
 }

@@ -25,15 +25,15 @@ public class GalaxyBotTeleOp extends OpMode {
     
     private boolean fieldCentric = false;
 
-    private void mecanumDrive(double botHeading) {
-        final double LIMIT_POWER = 0.75;
+    private void mecanumDrive(double rotation) {
+        final double LIMIT_POWER = 0.5;
 
-        double y = -gamepad1.left_stick_y; // Remember, this is reversed!
-        double x = gamepad1.left_stick_x;
+        double y = gamepad1.left_stick_y; // Remember, this is reversed!
+        double x = -gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x;
 
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+        double rotX = x * Math.cos(rotation) - y * Math.sin(rotation);
+        double rotY = x * Math.sin(rotation) + y * Math.cos(rotation);
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
 
@@ -42,11 +42,22 @@ public class GalaxyBotTeleOp extends OpMode {
         double frontRightPower;
         double backRightPower;
 
-        frontLeftPower = (rotY + rotX + rx) / denominator * LIMIT_POWER;
-        backLeftPower = (rotY - rotX + rx) / denominator * LIMIT_POWER;
-        frontRightPower = (rotY - rotX - rx) / denominator * LIMIT_POWER;
-        backRightPower = (rotY + rotX - rx) / denominator * LIMIT_POWER;
-
+        if (gamepad1.left_bumper) {
+            fieldCentric = !fieldCentric;
+        }
+        fieldCentric = false;
+        if (fieldCentric) {
+            frontLeftPower = (rotY + rotX + rx) / denominator * LIMIT_POWER;
+            backLeftPower = (rotY - rotX + rx) / denominator * LIMIT_POWER;
+            frontRightPower = (rotY - rotX - rx) / denominator * LIMIT_POWER;
+            backRightPower = (rotY + rotX - rx) / denominator * LIMIT_POWER;
+        }
+        else {
+            frontLeftPower = (y + x + rx) / denominator * LIMIT_POWER;
+            backLeftPower = (y - x + rx) / denominator * LIMIT_POWER;
+            frontRightPower = (y - x - rx) / denominator * LIMIT_POWER;
+            backRightPower = (y + x - rx) / denominator * LIMIT_POWER;
+        }
         robot.drive(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
         telemetry.addData("leftFrontPower", frontLeftPower);
         telemetry.addData("leftBackPower", backLeftPower);
@@ -79,26 +90,26 @@ public class GalaxyBotTeleOp extends OpMode {
             robot.setIntakeOn();
         }
     }
-//    private void clawRotateInput() {
-//        if(gamepad1.y) {
-//            robot.setClawRotator();
-//        }
-//    }
-//
-//
-//    private void clawOpenInput() {
-//        if(gamepad1.a) {
-//            robot.setClawOpen();
-//        }
-//    }
-//    private void spineReorientation() {
-//        if(gamepad1.dpad_down) {
-//            robot.setSpineAngularity(-0.05f);
-//        }
-//        else if(gamepad1.dpad_up) {
-//            robot.setSpineAngularity(0.05f);
-//        }
-//    }
+    private void clawRotateInput() {
+        if(gamepad1.y) {
+            robot.setClawRotator();
+        }
+    }
+
+
+    private void clawOpenInput() {
+        if(gamepad1.a) {
+            robot.setClawOpen();
+        }
+    }
+    private void spineReorientation() {
+        if(gamepad1.dpad_down) {
+            robot.setSpineAngularity(-0.05f);
+        }
+        else if(gamepad1.dpad_up) {
+            robot.setSpineAngularity(0.05f);
+        }
+    }
     @Override
     public void init() {
         robot = new GalaxyBot(hardwareMap);
@@ -119,7 +130,7 @@ public class GalaxyBotTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        double botHeading = -imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
         try {
             copyGamepad();
@@ -129,12 +140,11 @@ public class GalaxyBotTeleOp extends OpMode {
 
         mecanumDrive(botHeading);
         liftRobot();
-//
-//        spineReorientation();
-     intakePixel();
-     telemetry.addData("intake on", robot.getIntakeOn());
-//        clawRotateInput();
-//        clawOpenInput();
+
+        spineReorientation();
+        intakePixel();
+        clawRotateInput();
+        clawOpenInput();
         robot.intake();
         telemetry.update();
     }
