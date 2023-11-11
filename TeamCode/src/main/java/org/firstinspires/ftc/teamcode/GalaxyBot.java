@@ -13,7 +13,10 @@ public class GalaxyBot {
     private DcMotor leftFront;
     private DcMotor rightBack;
     private DcMotor rightFront;
-    private DcMotor linearActuator;
+    //private DcMotor linearActuator;
+
+    private DcMotor linearSlideLeft;
+    private DcMotor linearSlideRight;
     private DcMotor intake;
     private HardwareMap hwMap;
 
@@ -27,9 +30,22 @@ public class GalaxyBot {
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftBack = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
-        linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
+        //linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
+        linearSlideLeft = hwMap.get(DcMotor.class, "leftEncoder");
+        linearSlideRight = hwMap.get(DcMotor.class, "rightEncoder");
         intake = hwMap.get(DcMotor.class, "intake");
-        linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        //linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        linearSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        linearSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        linearSlideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        linearSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linearSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linearSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linearSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -49,10 +65,22 @@ public class GalaxyBot {
         rightFront.setPower(frontRightPower);
     }
 
-    public void lift(float intensity, float direction) {
-        linearActuator.setPower(intensity * direction);
-    }
+//    public void lift(float intensity, float direction) {
+//        linearActuator.setPower(intensity * direction);
+//    }
 
+    public void linearSlide(int distance, int direction) {
+        linearSlideLeft.setTargetPosition(linearSlideLeft.getCurrentPosition() + distance * direction);
+        linearSlideRight.setTargetPosition(linearSlideLeft.getCurrentPosition() + distance * direction);
+        linearSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlideLeft.setPower(0.75);
+        linearSlideRight.setPower(0.75);
+    }
+    public void stopSlide() {
+        linearSlideRight.setPower(0.0);
+        linearSlideLeft.setPower(0.0);
+    }
     public void intake() {
         intake.setPower(1.0);
     }

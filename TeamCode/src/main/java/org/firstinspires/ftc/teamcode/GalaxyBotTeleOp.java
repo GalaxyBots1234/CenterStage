@@ -84,11 +84,15 @@ public class GalaxyBotTeleOp extends OpMode {
     }
 
     private void liftRobotSlide() {
+        int distance = 100;
         if (gamepad1.dpad_up) {
-            robot.linearSlide(.5f, 1);
+            robot.linearSlide(distance, 1);
         }
         else if(gamepad1.dpad_down) {
-            robot.linearSlide(.5f, -1);
+            robot.linearSlide(distance, -1);
+        }
+        else {
+            robot.stopSlide();
         }
     }
 
