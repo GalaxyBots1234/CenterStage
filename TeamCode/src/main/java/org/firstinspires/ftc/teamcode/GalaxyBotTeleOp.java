@@ -22,14 +22,13 @@ public class GalaxyBotTeleOp extends OpMode {
 
     private IMU imu;
 
-    
     private boolean fieldCentric = false;
 
     private void mecanumDrive(double rotation) {
         final double LIMIT_POWER = 0.5;
 
-        double y = gamepad1.left_stick_y; // Remember, this is reversed!
-        double x = -gamepad1.left_stick_x;
+        double y = -gamepad1.left_stick_y; // Remember, this is reversed!
+        double x = gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x;
 
         double rotX = x * Math.cos(rotation) - y * Math.sin(rotation);
@@ -45,7 +44,6 @@ public class GalaxyBotTeleOp extends OpMode {
         if (gamepad1.left_bumper) {
             fieldCentric = !fieldCentric;
         }
-        fieldCentric = false;
         if (fieldCentric) {
             frontLeftPower = (rotY + rotX + rx) / denominator * LIMIT_POWER;
             backLeftPower = (rotY - rotX + rx) / denominator * LIMIT_POWER;
@@ -65,7 +63,7 @@ public class GalaxyBotTeleOp extends OpMode {
         telemetry.addData("rightBackPower", backRightPower);
         telemetry.addData("y", y);
         telemetry.addData("x", x);
-        telemetry.addData("rx", rx);
+        telemetry.addData("rx", x);
     }
 
     private void copyGamepad() throws RobotCoreException {
@@ -76,38 +74,30 @@ public class GalaxyBotTeleOp extends OpMode {
         currentGamepad2.copy(gamepad2);
     }
 
-    private void liftRobot() {/*
+    private void liftRobot() {
         if (gamepad1.a) {
-            robot.lift(.5f, -1);
+            // robot.lift(.5f, -1);
         }
         else if(gamepad1.b) {
-            robot.lift(.5f, 1);
-        }*/
+            // robot.lift(.5f, 1);
+        }
+    }
+
+    private void liftRobotSlide() {
+        if (gamepad1.dpad_up) {
+            robot.linearSlide(.5f, 1);
+        }
+        else if(gamepad1.dpad_down) {
+            robot.linearSlide(.5f, -1);
+        }
+        else {
+            robot.stopSlide();
+        }
     }
 
     private void intakePixel() {
         if (gamepad1.x) {
-            robot.setIntakeOn();
-        }
-    }
-    private void clawRotateInput() {
-        if(gamepad1.y) {
-            robot.setClawRotator();
-        }
-    }
-
-
-    private void clawOpenInput() {
-        if(gamepad1.a) {
-            robot.setClawOpen();
-        }
-    }
-    private void spineReorientation() {
-        if(gamepad1.dpad_down) {
-            robot.setSpineAngularity(-0.05f);
-        }
-        else if(gamepad1.dpad_up) {
-            robot.setSpineAngularity(0.05f);
+            robot.intake();
         }
     }
     @Override
@@ -127,7 +117,6 @@ public class GalaxyBotTeleOp extends OpMode {
 
     }
 
-
     @Override
     public void loop() {
         double botHeading = -imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
@@ -139,13 +128,9 @@ public class GalaxyBotTeleOp extends OpMode {
         }
 
         mecanumDrive(botHeading);
-        liftRobot();
-
-        spineReorientation();
+        //liftRobot();
         intakePixel();
-        clawRotateInput();
-        clawOpenInput();
-        robot.intake();
+        liftRobotSlide();
         telemetry.update();
     }
 }

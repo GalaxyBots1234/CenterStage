@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.concurrent.TimeUnit;
@@ -14,24 +13,13 @@ public class GalaxyBot {
     private DcMotor leftFront;
     private DcMotor rightBack;
     private DcMotor rightFront;
-    private DcMotor linearActuator;
+    //private DcMotor linearActuator;
+
+    private DcMotor linearSlideLeft;
+    private DcMotor linearSlideRight;
     private DcMotor intake;
-
-    private Servo clawRotator;
-    private Servo clawControl;
-
-    private Servo robotSpineLeft;
-
-    private Servo robotSpineRight;
     private HardwareMap hwMap;
-    private DcMotor rightslide;
-    private DcMotor leftslide;
 
-    private boolean intakeOn = false;
-
-    private boolean clawRotate = false;
-
-    private boolean clawOpen = false;
     private ElapsedTime runtime = new ElapsedTime();
     public GalaxyBot(HardwareMap hwMap) {
         this.hwMap = hwMap;
@@ -42,50 +30,24 @@ public class GalaxyBot {
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftBack = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
-        linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
+        //linearActuator = hwMap.get(DcMotor.class, "linear_actuator");
+        linearSlideLeft = hwMap.get(DcMotor.class, "leftEncoder");
+        linearSlideRight = hwMap.get(DcMotor.class, "rightEncoder");
         intake = hwMap.get(DcMotor.class, "intake");
-        clawControl = hwMap.get(Servo.class, "claw_control");
-        clawRotator = hwMap.get(Servo.class, "claw_rotator");
-        robotSpineLeft = hwMap.get(Servo.class, "robot_spine_left");
+        //linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        robotSpineRight = hwMap.get(Servo.class, "robot_spine_right");
-        robotSpineLeft.setDirection(Servo.Direction.REVERSE);
-        leftslide = hwMap.get(DcMotor.class, "left_slide");
-        rightslide = hwMap.get(DcMotor.class,"right_slide");
-        linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        linearSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        linearSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        linearSlideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        linearSlideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linearSlideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
     }
-
-    public void setSpineAngularity(float angularity) {
-        robotSpineLeft.setPosition(robotSpineLeft.getPosition() + angularity);
-
-        robotSpineRight.setPosition(robotSpineRight.getPosition() + angularity);
-    }
-
-    public void setClawRotator() {
-        clawRotate = !clawRotate;
-        if(clawRotate) {
-            clawRotator.setPosition(1.0);
-        }
-        else {
-            clawRotator.setPosition(0.0);
-        }
-    }
-
-    public void setClawOpen() {
-        clawOpen = !clawOpen;
-        if(clawOpen) {
-            clawControl.setPosition(1.0);
-        }
-        else {
-            clawControl.setPosition(0.0);
-        }
-    }
-
-
     public void drive(double speed) {
         leftBack.setPower(speed);
         leftFront.setPower(speed);
@@ -99,33 +61,25 @@ public class GalaxyBot {
         rightBack.setPower(backRightPower);
         rightFront.setPower(frontRightPower);
     }
-    public void moveSlide(double power, double direction) {
-        leftslide.setPower(power * direction);
-        rightslide.setPower(power * direction);
 
+//    public void lift(float intensity, float direction) {
+//        linearActuator.setPower(intensity * direction);
+//    }
+
+    public void linearSlide(float intensity, float direction) {
+        linearSlideRight.setPower(intensity * direction);
+        linearSlideLeft.setPower(intensity * direction);
     }
-
-
-    public void lift(float intensity, float direction) {
-        linearActuator.setPower(intensity * direction);
+    public void stopSlide() {
+        linearSlideRight.setPower(0.0);
+        linearSlideLeft.setPower(0.0);
     }
-
     public void intake() {
-        if(intakeOn) {
-            intake.setPower(1.0f);
-        }
-        else {
-            intake.setPower(0.0f);
-        }
+        intake.setPower(1.0);
     }
 
-    public void setIntakeOn() {
-        intakeOn = !intakeOn;
-    }
     public double getElapsedTime() {
         return runtime.time(TimeUnit.MILLISECONDS);
     }
-
-
 
 }
