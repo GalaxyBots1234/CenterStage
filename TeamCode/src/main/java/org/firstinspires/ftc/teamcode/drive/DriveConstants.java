@@ -32,7 +32,7 @@ public class DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
-    public static final boolean RUN_USING_ENCODER = true;
+    public static final boolean RUN_USING_ENCODER = false;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
@@ -55,8 +55,8 @@ public class DriveConstants {
      * empirically tuned.
      */
     public static double kV = 1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = 0;
-    public static double kStatic = 0;
+    public static double kA = 0.002;
+    public static double kStatic = 0.02;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -65,8 +65,8 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 24.6973215135;
-    public static double MAX_ACCEL = 24.6973215135;
+    public static double MAX_VEL = 49.394643027;
+    public static double MAX_ACCEL = 49.394643027;
     public static double MAX_ANG_VEL = Math.toRadians(60);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
@@ -76,7 +76,7 @@ public class DriveConstants {
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
             RevHubOrientationOnRobot.LogoFacingDirection.UP;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
-            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+            RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
 
 
     public static double encoderTicksToInches(double ticks) {
