@@ -21,20 +21,18 @@ public class GalaxyBot {
     private DcMotor linearSlideLeft;
     private DcMotor linearSlideRight;
     private DcMotor intake;
+    public Servo box;
+    boolean boxed = false;
+    public Servo leftSpinner;
 
-    private Servo leftSpinner;
+    public Servo rightSpinner;
 
-    private Servo rightSpinner;
+    //private DcMotor hanger;
 
-    private Servo airplaneLauncher;
-
-    private Servo leftClaw;
-    private Servo rightClaw;
+    //private Servo airplaneLauncher;
 
     private HardwareMap hwMap;
     boolean intaking = false;
-    boolean leftClawOpen = false;
-   boolean rightClawOpen = false;
     private ElapsedTime runtime = new ElapsedTime();
     public GalaxyBot(HardwareMap hwMap) {
         this.hwMap = hwMap;
@@ -54,17 +52,14 @@ public class GalaxyBot {
         //linearActuator = hwMap.get(DcMotor.class, "linearActuator");
         linearSlideLeft = hwMap.get(DcMotor.class, "leftLinearSlide");
         linearSlideRight = hwMap.get(DcMotor.class, "rightLinearSlide");
-        airplaneLauncher = hwMap.get(Servo.class, "airplane_launcher");
+        //airplaneLauncher = hwMap.get(Servo.class, "airplane_launcher");
         intake = hwMap.get(DcMotor.class, "intake");
-
-        leftClaw = hwMap.get(Servo.class, "left_claw");
-
-        rightClaw = hwMap.get(Servo.class, "right_claw");
-
-        leftClaw.setDirection(Servo.Direction.REVERSE);
+        box = hwMap.get(Servo.class, "box");
         leftSpinner = hwMap.get(Servo.class, "left_spinner");
         rightSpinner = hwMap.get(Servo.class, "right_spinner");
 
+        //hanger = hwMap.get(DcMotor.class, "hanger");
+        //hanger.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rightSpinner.setDirection(Servo.Direction.REVERSE);
 
@@ -80,7 +75,6 @@ public class GalaxyBot {
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-
     }
     public void drive(double speed) {
         leftBack.setPower(speed);
@@ -88,10 +82,10 @@ public class GalaxyBot {
         rightBack.setPower(speed);
         rightFront.setPower(speed);
     }
-
-    public void launchAirplane() {
-        airplaneLauncher.setPosition(1.0);
-    }
+//
+//    public void launchAirplane() {
+//        airplaneLauncher.setPosition(1.0);
+//    }
     public void setSpinners(boolean down, float amount) {
         if (!down) {
             leftSpinner.setPosition(leftSpinner.getPosition() + amount);
@@ -103,28 +97,21 @@ public class GalaxyBot {
         }
     }
 
-
-    public void setLeftClaw()  {
-        leftClawOpen = !leftClawOpen;
-        if (leftClawOpen) {
-            leftClaw.setPosition(.35);
-        }
-        else {
-            leftClaw.setPosition(0.0);
-
-        }
+    public void setSpinners(float amount) {
+        leftSpinner.setPosition(amount);
+        rightSpinner.setPosition(amount);
     }
 
+    //public void moveHanger(float intensity, int power) {
+        //hanger.setPower(power * intensity);
+   // }
 
-    public void setRightClaw() {
-        rightClawOpen = !rightClawOpen;
-        if (rightClawOpen) {
-            rightClaw.setPosition(.65);
-        }
-        else {
-            rightClaw.setPosition(0.0);
+    public void openBox() {
+        box.setPosition(1.0);
+    }
 
-        }
+    public void closeBox() {
+        box.setPosition(0.0);
     }
 
     public void drive(double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
@@ -150,9 +137,9 @@ public class GalaxyBot {
         intaking = !intaking;
     }
 
-    public void doIntake() {
+  public void doIntake() {
         if (intaking) {
-            intake.setPower(.7);
+            intake.setPower(-.8);
         }
         else {
             intake.setPower(0.0);

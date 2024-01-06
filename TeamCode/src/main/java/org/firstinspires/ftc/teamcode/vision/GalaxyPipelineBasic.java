@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.vision;
 
+import android.graphics.Canvas;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -13,24 +17,30 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GalaxyPipelineBasic extends OpenCvPipeline {
+public class GalaxyPipelineBasic implements VisionProcessor {
     Telemetry telemetry;
 
     public GalaxyPipelineBasic(Telemetry telemetry) {
         this.telemetry = telemetry;
     }
-    @Override
-    public Mat processFrame(Mat input) {
-        // HSV is better for comparing ranges than RGB
-        Mat mat = input;
-        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY);
-        // if the input is empty (something is wrong) do not make any assumptions (keep using old information)
-        if(mat.empty()) {
-            return input;
-        }
 
-        telemetry.update();
-        return mat;
+    public Scalar BLUE_MIN = new Scalar(110, 50, 50);
+    public Scalar BLUE_MAX = new Scalar(130, 255, 255);
+
+    @Override
+    public void init(int width, int height, CameraCalibration calibration) {
+
     }
 
+    @Override
+    public Object processFrame(Mat frame, long captureTimeNanos) {
+        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2HSV);
+        Core.inRange(frame, BLUE_MIN, BLUE_MAX, frame);
+        return null;
+    }
+
+    @Override
+    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+
+    }
 }
